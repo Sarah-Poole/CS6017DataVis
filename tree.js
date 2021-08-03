@@ -12,14 +12,39 @@ function breadthFirstSearch(){
     while(queue.length != 0) { //While there are still nodes to traverse
         let element = queue.shift();
         //Change element to new color
-        console.log("This is the element's id: " + element.id);
         d3.select("#node-"+element.id)
+            .style("fill", "blue")
+            .style("stroke", "steelblue")
             .transition().duration(1000).delay(500*anim)
-            .style("fill", "red")
+            .style("fill", "coral")
+            .style("stroke", "pink")
         anim++;    
         if (element.children != undefined) { 
             for(var i=0; i<element.children.length; i++) {
                 queue.push(element.children[i]) //Add any children to the queue
+            }
+        }
+    }
+}
+
+//Define dfs function
+function depthFirstSearch(){
+    let queue = [];
+    let anim = 0;
+    queue.push(treeRoot);
+    while(queue.length != 0) {
+        let element = queue.pop();
+        //Change element to new color
+        d3.select("#node-"+element.id)
+            .style("fill", "blue")
+            .style("stroke", "steelblue")
+            .transition().duration(1000).delay(500*anim)
+            .style("fill", "lavender")
+            .style("stroke", "purple")
+        anim++;
+        if(element.children != undefined) {
+            for(var i=0; i<element.children.length; i++) {
+                queue.push(element.children[element.children.length-i-1]);
             }
         }
     }
@@ -77,27 +102,5 @@ window.onload = async function(){
         .attr("class", "link")
         .attr("d", connection);
 
-
-    // let node = finalTree.selectAll("g.node")
-    //     .data(nodes, function(d) { return d.id || (d.id = ++i); })
-    //     .attr("class", "node");
-
-    // let nodeEnter = node.enter().append("g")
-    //     .attr("transform", function(d) {return "translate(" + d.y + "," + d.x + ")"; });
-
-    // nodeEnter.append("circle")
-    //     .attr("id", function(d) {return "node-"+d.id})
-    //     .attr("r", 20)
-    //     .style("fill", "blue");
-    
-    // let link = finalTree.selectAll("path.link")
-    //     .data(links, function(d) { return d.target.id; });
-     
-    // link.enter().insert("path", "g")
-    //     .attr("class", "link")
-    //     .attr("d", connection);
-
     d3.select("#nodes").raise();
-
-    breadthFirstSearch();
 }
