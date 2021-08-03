@@ -55,7 +55,7 @@ window.onload = async function(){
         .attr("transform", function(d) {return "translate(" + d.y + "," + d.x + ")"; });
 
     nodeEnter.append("circle")
-        .attr("r", 40)
+        .attr("r", 20)
         .style("fill", "blue");
     
     let link = finalTree.selectAll("path.link")
@@ -64,49 +64,4 @@ window.onload = async function(){
     link.enter().insert("path", "g")
         .attr("class", "link")
         .attr("d", connection);
-     
 }
-        
-
-    // let margin = {top: 20, right: 0, bottom: 20, left: 0}
-    // let width = document.getElementById("canvas").offsetWidth - margin.right - margin.left;
-    // let height = document.getElementById("canvas").offsetHeight - margin.top - margin.bottom;
-
-    //Create a d3 tree
-    // let tree = d3.tree().size([height, width]);
-    //Give the data relationshipes
-    // let nodes = d3.hierarchy(treeData, d => d.children);
-    //Map node data to the tree layout
-    // nodes = tree(nodes);
-
-    // let node = d3.select("#canvas")
-    //     .selectAll(".node")
-    //     .data(nodes.descendants())
-    //     .join(
-    //         enter => {
-    //             enter.append("node")
-    //             .attr("transform", d => "translate(" + d.y + "," + d.x + ")");
-    //         }
-    //     )
-
-    // let link = d3.select("#canvas")
-    //         .selectAll(".link")
-    //         .data(nodes.descendants().slice(1))
-    //         .join(
-    //             enter => {
-    //                 enter.append("path")
-    //                 .attr("class", "link")
-    //                 .style("stroke", d => d.treeData)
-    //             }
-    //         )
-    // d3.select("#canvas")
-    //     .join(
-    //         enter => {
-    //             node.append("circle")
-    //             .attr("r", 40)
-    //             .attr("cx", 50)
-    //             .attr("cy", 20)
-    //             .style("fill", "blue");
-    //         }
-    //     )
-//}
