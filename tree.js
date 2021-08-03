@@ -2,17 +2,24 @@
 let treeData = [{children:[{children:[{},{},{}]},{children:[{children:[{}]}]},{},{children:[{},{children:[{},{}]}]}]}];
 let root = treeData[0];
 let i = 0;
+let treeRoot;
 
 //Define bfs function
 function breadthFirstSearch(){
-    let queue = new Queue(root);
-    queue.push(root); //Add root of tree
-    while(!queue.isEmpty()) { //While there are still nodes to traverse
-        let element = queue.dequeue();
+    let queue = [];
+    let anim = 0;
+    queue.push(treeRoot); //Add root of tree
+    while(queue.length != 0) { //While there are still nodes to traverse
+        let element = queue.shift();
         //Change element to new color
+        console.log("This is the element's id: " + element.id);
+        d3.select("#node-"+element.id)
+            .transition().duration(1000).delay(500*anim)
+            .style("fill", "red")
+        anim++;    
         if (element.children != undefined) { 
             for(var i=0; i<element.children.length; i++) {
-                queue.enqueue(element.children[i]) //Add any children to the queue
+                queue.push(element.children[i]) //Add any children to the queue
             }
         }
     }
@@ -42,26 +49,55 @@ window.onload = async function(){
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    let treeRoot = d3.hierarchy(root);
+    //Get d3 objects for root, nodes and links
+    treeRoot = d3.hierarchy(root);
     tree(treeRoot);
     let nodes = treeRoot.descendants();
     let links = treeRoot.links();
 
     let node = finalTree.selectAll("g.node")
-        .data(nodes, function(d) { return d.id || (d.id = ++i); });
+        .data(nodes, function(d) { return d.id || (d.id = ++i); })
+        .attr("cx",function(d){return d.x;})
+        .attr("cy",function(d){return d.y;})
+        .attr("r", 20)
 
     let nodeEnter = node.enter().append("g")
         .attr("class", "node")
         .attr("transform", function(d) {return "translate(" + d.y + "," + d.x + ")"; });
 
     nodeEnter.append("circle")
+        .attr("id",function(d){return "node-"+d.id})
         .attr("r", 20)
         .style("fill", "blue");
-    
+
     let link = finalTree.selectAll("path.link")
-        .data(links, function(d) { return d.target.id; });
-     
-    link.enter().insert("path", "g")
+        .data(links, function(d) { return d.target.id; })
+        .enter()
+        .insert("path", "g.node")
         .attr("class", "link")
         .attr("d", connection);
+
+
+    // let node = finalTree.selectAll("g.node")
+    //     .data(nodes, function(d) { return d.id || (d.id = ++i); })
+    //     .attr("class", "node");
+
+    // let nodeEnter = node.enter().append("g")
+    //     .attr("transform", function(d) {return "translate(" + d.y + "," + d.x + ")"; });
+
+    // nodeEnter.append("circle")
+    //     .attr("id", function(d) {return "node-"+d.id})
+    //     .attr("r", 20)
+    //     .style("fill", "blue");
+    
+    // let link = finalTree.selectAll("path.link")
+    //     .data(links, function(d) { return d.target.id; });
+     
+    // link.enter().insert("path", "g")
+    //     .attr("class", "link")
+    //     .attr("d", connection);
+
+    d3.select("#nodes").raise();
+
+    breadthFirstSearch();
 }
